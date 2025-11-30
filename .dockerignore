@@ -1,0 +1,33 @@
+
+.env
+
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+
+.venv/
+venv/
+
+
+.vscode/
+.idea/
+
+# Git
+.git
+.gitignore
+.github/
+
+# Streamlit local files
+.streamlit/
+
+
+# Local annotation logs
+annotations/*
+
+# OS junk
+.DS_Store
+Thumbs.db
+

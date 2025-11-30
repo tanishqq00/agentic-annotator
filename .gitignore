@@ -1,0 +1,43 @@
+# Environment + secrets
+.env
+*.secret
+*.key
+*.pem
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env/
+.venv/
+venv/
+
+# Streamlit
+.streamlit/
+
+# VS Code / PyCharm / IDE
+.vscode/
+.idea/
+
+# OS-generated
+.DS_Store
+Thumbs.db
+
+
+
+# Annotations (do not upload)
+annotations/*.json
+annotations/*.txt
+annotations/*.png
+annotations/*.jpg
+!annotations/gt_sample.json
+
+# Logs
+*.log
+
+# Docker
+*.pid
+*.tar
+
+
