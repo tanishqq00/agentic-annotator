@@ -70,6 +70,10 @@ left, right = st.columns((2, 1))
 
 # LEFT COLUMN — Upload + Planner
 
+# tanishqq00/agentic-annotator/agentic-annotator-279ab10d37512c5a77327e16f824b84faa7b35ec/app.py
+
+# LEFT COLUMN — Upload + Planner
+
 with left:
     st.subheader("Image Input")
 
@@ -88,8 +92,17 @@ with left:
 
     st.markdown("---")
     st.subheader("Planner")
+    
+    # Collect the options from the sidebar (defined earlier by st.sidebar.checkbox)
+    planner_options = {
+        "run_iou": run_iou,
+        "show_boxes": show_boxes,
+        "auto_save": auto_save
+    }
+    
     try:
-        plan_json = make_plan("data/ui/sample")
+        # Pass the image path (placeholder) and the dynamic options to the Planner Agent
+        plan_json = make_plan("data/ui/sample", planner_options) 
         st.json(json.loads(plan_json))
     except Exception as e:
         st.error("Planner failed.")
@@ -97,7 +110,7 @@ with left:
 
 
 # RIGHT COLUMN — Events + Outputs
-
+# -----------------------------------------
 with right:
     st.subheader("Session Events")
     session_box = st.empty()
@@ -111,9 +124,7 @@ with right:
 def process_image(image_path):
     session.add_event(sid, f"Processing {image_path}")
 
-    
     # 1. Perception
-   
     try:
         raw = annotate_image(image_path)
         session.add_event(sid, "Perception completed")
@@ -138,34 +149,46 @@ def process_image(image_path):
         match = re.search(r"(\{[\s\S]*\})", corrected)
         corrected_json = json.loads(match.group(0)) if match else {"objects": []}
 
-    
     # 3. IoU Evaluation
-    
     iou_score = None
     if run_iou and os.path.exists("annotations/gt_sample.json"):
         try:
+            # Open image to get dimensions for normalized -> pixel conversion
+            img = Image.open(image_path)
+            W, H = img.size
+            
             with open("annotations/gt_sample.json") as f:
                 gt = json.load(f)
-            pred = corrected_json["objects"][0]["bbox"]
+                
+            # PRED: Extract normalized coordinates
+            x_norm, y_norm, w_norm, h_norm = corrected_json["objects"][0]["bbox_norm"]
+            
+            # PRED: Convert normalized prediction (x_norm, y_norm, w_norm, h_norm) to pixel (x, y, w, h)
+            pred = [
+                x_norm * W, 
+                y_norm * H, 
+                w_norm * W, 
+                h_norm * H
+            ]
+
+            # GT: Assuming ground truth is in pixel format [x, y, w, h] as expected by eval.py:iou()
             truth = gt["objects"][0]["bbox"]
+            
             iou_score = iou(pred, truth)
+            
             remember("last_iou", iou_score)
             session.add_event(sid, f"IoU: {iou_score}")
         except Exception as e:
             logger.error(f"IoU failed: {e}")
 
-   
     # 4. YOLO Conversion
-    
     try:
         yolo_txt = convert_to_yolo(json.dumps(corrected_json), image_path)
     except Exception as e:
         logger.error("YOLO conversion failed.")
         yolo_txt = ""
 
-    
     # 5. Visualization
-    
     boxed = None
     if show_boxes:
         try:
@@ -173,9 +196,7 @@ def process_image(image_path):
         except Exception:
             logger.warning("Box drawing failed.")
 
-    
     # 6. Save
-   
     base = os.path.splitext(os.path.basename(image_path))[0]
     if auto_save:
         os.makedirs("annotations", exist_ok=True)

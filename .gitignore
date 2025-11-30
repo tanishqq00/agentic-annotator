@@ -40,4 +40,11 @@ annotations/*.jpg
 *.pid
 *.tar
 
+# Data files to ignore
+data/ui/*
+data/memory_bank.json
+data/sample.jpeg
+data/sample.png
+data/sample.txt
+
 

@@ -2,6 +2,7 @@
 import json
 import logging
 from datetime import datetime
+from PIL import Image
 
 from src.config import GOOGLE_API_KEY
 import google.generativeai as genai
@@ -49,8 +50,21 @@ logger.info("Session created.")
 
 # 2. PLANNING (Agent #1)
 
+# main.py (Around line 40)
+
+...
+# 2. PLANNING (Agent #1)
+
+# Define default options for the pipeline run
+default_options = {
+    "run_iou": True,
+    "show_boxes": False, # Visualization is not typically run in the console script
+    "auto_save": True
+}
+
 try:
-    plan_json = make_plan(IMAGE_PATH)
+    # Pass the image path and the default options to the dynamic Planner Agent
+    plan_json = make_plan(IMAGE_PATH, default_options)
     plan = json.loads(plan_json)
     session.add_event(sid, f"Plan created.")
     logger.info("Planning completed.")
@@ -102,15 +116,34 @@ except Exception as e:
 
 # 5. EVALUATION (IoU)
 
+# Note: Ensure 'from PIL import Image' is at the top of your main.py file.
+# The IMAGE_PATH and GT_PATH variables are assumed to be defined earlier.
+
 iou_score = None
 
 try:
     if corrected_json.get("objects"):
+        # 1. Open image to get dimensions for normalized -> pixel conversion
+        img = Image.open(IMAGE_PATH)
+        W, H = img.size
+        
         with open(GT_PATH, "r") as f:
             gt = json.load(f)
 
-        pred_bbox = corrected_json["objects"][0]["bbox"]
-        gt_bbox = gt["objects"][0]["bbox"]
+        # 2. PRED: Extract normalized coordinates
+        x_norm, y_norm, w_norm, h_norm = corrected_json["objects"][0]["bbox_norm"]
+        
+        # 3. PRED: Convert normalized prediction (x_norm, y_norm, w_norm, h_norm) to pixel (x, y, w, h)
+        pred_bbox = [
+            x_norm * W,
+            y_norm * H,
+            w_norm * W,
+            h_norm * H
+        ]
+
+        # 4. GT: Assuming ground truth is in pixel format [x, y, w, h] as expected by eval.py:iou()
+        # If your ground truth is also normalized, you would need to convert it here too.
+        gt_bbox = gt["objects"][0]["bbox"] 
 
         iou_score = iou(pred_bbox, gt_bbox)
         session.add_event(sid, f"IoU: {iou_score}")

@@ -49,28 +49,38 @@ def normalize_annotation_structure(data):
 
 
 
+# tanishqq00/agentic-annotator/agentic-annotator-279ab10d37512c5a77327e16f824b84faa7b35ec/src/yolo_formatter.py
+
+...
 def convert_to_yolo(normalized_json_str, image_path):
     data = json.loads(normalized_json_str)
 
+    # Note: W, H are only needed here for image opening, but not for calculation below 
+    # since we work with normalized coordinates directly.
     img = Image.open(image_path)
-    W, H = img.size
+    # W, H = img.size # No longer needed for calculation
 
     yolo_lines = []
 
     for obj in data["objects"]:
         x_norm, y_norm, w_norm, h_norm = obj["bbox_norm"]
 
-        # Convert normalized to pixel
-        x = x_norm * W
-        y = y_norm * H
-        w = w_norm * W
-        h = h_norm * H
+        # Convert normalized top-left (x_norm, y_norm, w_norm, h_norm) 
+        # to normalized center (cx, cy, ww, hh) directly.
+        
+        cx = x_norm + (w_norm / 2) # Normalized center x
+        cy = y_norm + (h_norm / 2) # Normalized center y
+        ww = w_norm                # Normalized width
+        hh = h_norm                # Normalized height
 
-        # YOLO values: cx, cy, w, h (all normalized)
-        cx = (x + w / 2) / W
-        cy = (y + h / 2) / H
-        ww = w / W
-        hh = h / H
+        # The previous pixel conversions are now simplified:
+        # x = x_norm * W
+        # y = y_norm * H
+        # w = w_norm * W
+        # h = h_norm * H
+        # cx = (x + w / 2) / W 
+        #    = ((x_norm * W) + (w_norm * W) / 2) / W
+        #    = x_norm + w_norm / 2  <-- New simplified formula
 
         yolo_lines.append(f"0 {cx:.6f} {cy:.6f} {ww:.6f} {hh:.6f}")
 
