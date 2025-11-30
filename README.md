@@ -1,3 +1,17 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Streamlit-App-red?style=for-the-badge&logo=streamlit" />
+  <img src="https://img.shields.io/badge/Gemini%20Vision-API-success?style=for-the-badge&logo=google" />
+  <img src="https://img.shields.io/badge/Multi--Agent-System-purple?style=for-the-badge" />
+  
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Docker-Containerized-informational?style=for-the-badge&logo=docker" />
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
+</p>
+
+
 # 🧠 Agentic Auto-Annotation System
 
 The Agentic Auto-Annotation System is a multi-agent AI pipeline that automatically annotates images using Gemini Vision, refines the bounding boxes, evaluates annotation quality through IoU, converts results into YOLO format, and presents everything through a clean Streamlit UI.
