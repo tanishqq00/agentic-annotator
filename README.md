@@ -1,10 +1,10 @@
-## 🧠 Agentic Auto-Annotation System
+# 🧠 Agentic Auto-Annotation System
 
 The Agentic Auto-Annotation System is a multi-agent AI pipeline that automatically annotates images using Gemini Vision, refines the bounding boxes, evaluates annotation quality through IoU, converts results into YOLO format, and presents everything through a clean Streamlit UI.
 
 It demonstrates real-world agent collaboration, observability, memory, context engineering, and secure API usage — suitable for hackathons, workshops, and production scenarios.
 
-## 📌 Overview
+# 📌 Overview
 
 This project automates the image-annotation workflow using an LLM-powered multi-agent pipeline. An uploaded image goes through:
 
@@ -24,7 +24,7 @@ Visualization is done locally using Pillow, allowing users to preview bounding b
 
 The system also includes session tracking, memory persistence, observability, and secure secret management using Google Cloud Secret Manager.
 
-## 🌐 High-Level Architecture
+# 🌐 High-Level Architecture
 
                              ┌──────────────────────────┐
                              │       Streamlit UI       │
@@ -89,36 +89,36 @@ The system also includes session tracking, memory persistence, observability, an
 
 
 
-## 🧰 Tech Stack
+# 🧰 Tech Stack
 
-# Core Technologies
+## Core Technologies
 • Python 3.11
 • Gemini Vision API (Google Generative AI)
 • Streamlit for UI
 • Pillow (PIL) for image visualization
 
-# Agentic Components
+## Agentic Components
 • Multi-agent pipeline (planner, perception, correction)
 • IoU-based evaluation module
 • Session system for observability
 • Memory bank for persistence
 • Context-controlled annotation prompts
 
-# Deployment & Security
+## Deployment & Security
 • Docker for containerization
 • Google Cloud Run for serverless hosting
 • Google Secret Manager for API key security
 • .dockerignore & .gitignore optimized for safety
 
-# Data Formats
+## Data Formats
 • JSON for annotations
 • YOLO normalized format for training datasets
 
-## 🚀 Deployment Strategy
+# 🚀 Deployment Strategy
 
 This project supports two production deployment paths.
 
-# Cloud Run Deployment 
+## Cloud Run Deployment 
 
 Build the Docker image locally
 
@@ -138,13 +138,13 @@ gcloud run deploy agentic-annotator \
   --allow-unauthenticated
 
 
-# Features:
+## Features:
 • Fully serverless
 • Automatic scaling
 • Secure secrets
 • Fast global access
 
-# Local Deployment
+## Local Deployment
 
 Run:
 
@@ -155,7 +155,7 @@ The UI opens locally at:
 
 http://localhost:8501
 
-## 📂 Project Structure
+# 📂 Project Structure
 agentic_annotator/
 │
 ├── app.py                    # Streamlit UI  
@@ -170,7 +170,7 @@ agentic_annotator/
 ├── data/                     # Sample images  
 └── annotations/             # Auto-generated outputs  
 
-## ⚡ Features at a Glance
+# ⚡ Features at a Glance
 
 • Multi-agent system using LLMs
 • Zero-shot image annotation with Gemini Vision
@@ -182,11 +182,11 @@ agentic_annotator/
 • Secure API key handling
 • Dockerized and Cloud Run-ready
 
-## 👤 Author
+# 👤 Author
 
 Developed by Tanishq
 
 
-## 📄 License
+# 📄 License
 
 This project is open-sourced under the **MIT License**. See the [LICENSE](LICENSE) file for details.
