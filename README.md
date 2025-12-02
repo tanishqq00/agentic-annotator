@@ -143,14 +143,14 @@ Store your API key in Google Secret Manager
 Deploy using Cloud Run with secret injection
 
 Example deploy command:
-
+```
 gcloud run deploy agentic-annotator \
   --image docker.io/<username>/agentic-annotator:latest \
   --set-secrets GOOGLE_API_KEY=GOOGLE_API_KEY_SECRET:latest \
   --region us-central1 \
   --platform managed \
   --allow-unauthenticated
-
+```
 
 ## Features:
 • Fully serverless
@@ -161,15 +161,16 @@ gcloud run deploy agentic-annotator \
 ## Local Deployment
 
 Run:
-
+```
 streamlit run app.py
-
+```
 
 The UI opens locally at:
 
 http://localhost:8501
 
 # 📂 Project Structure
+```
 agentic_annotator/
 │
 ├── app.py                    # Streamlit UI  
@@ -183,7 +184,7 @@ agentic_annotator/
 ├── src/                      # Formatters, tools, eval, session, memory  
 ├── data/                     # Sample images  
 └── annotations/             # Auto-generated outputs  
-
+```
 # ⚡ Features at a Glance
 
 • Multi-agent system using LLMs
